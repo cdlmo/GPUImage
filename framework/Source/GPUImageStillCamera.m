@@ -336,6 +336,18 @@ void GPUImageCreateResizedSampleBuffer(CVPixelBufferRef cameraFrame, CGSize fina
     }];
 }
 
+- (UIImage *)imageFromSampleBuffer2:(CMSampleBufferRef)sampleBuffer {
+    
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:imageBuffer];
+    CIContext *temporaryContext = [CIContext contextWithOptions:nil];
+    CGImageRef videoImage = [temporaryContext createCGImage:ciImage fromRect:CGRectMake(0, 0, CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer))];
+    
+    UIImage *image = [[UIImage alloc] initWithCGImage:videoImage];
+    CGImageRelease(videoImage);
+    
+    return image;
+}
 
 
 @end
